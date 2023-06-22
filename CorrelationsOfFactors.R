@@ -14,7 +14,7 @@ corrf <- function(df) {
   GGally::ggpairs(df[,3:8])
 }
 
-# SBS Nagar data from 2018 - 2021
+# SBS Nagar data
 sbsnagar <- read.csv("sbsnagar.csv")
 summary(sbsnagar)
 corrf(sbsnagar)
@@ -104,19 +104,25 @@ lagcorrf(shirmuktsar$Cases, shirmuktsar$Rainfall, "Shir muktsar Cases vs Rainfal
 
 # TIME SERIES PLOTS ==============
 
-ts_sbsmain <- ts(sbsnagar[,3:5], frequency = 12, start=2018, end=2021)
-ts_sbs2 <- ts(sbsnagar[,5:8], frequency = 12, start=2018, end=2021)
+# FUNCTION TO MAKE PLOTS FOR TEMPORAL ANALYSIS
 
-plot(ts_sbsmain, xlab ="Monthly Data (2018-2021)",
-     main ="SBS Nagar",
-     col.main ="darkgreen")
+temporal <- function(df, region) {
+              ts_main <- ts(df[,3:5], frequency = 12, start=2018, end=2021)
+              ts2 <- ts(df[,6:8], frequency = 12, start=2018, end=2021)
+  
+              plot(ts_main, xlab ="Monthly Data (2018-2021)",
+                   main =region,
+                   col.main ="darkgreen")
+              plot(ts2, xlab ="Monthly Data (2018-2021)",
+                   main =region,
+                   col.main ="darkgreen")
+}
 
-#axis(1, at = seq(as.Date("2018-01-01"), 
-#                 as.Date("2021-12-01"), by = "month")
-#     )
 
-tsp <- tsp(ts_sbsmain)
-months <- format(tsp[1:2], "%b")
+temporal(sbsnagar, "SBS NAGAR")
+temporal(amritsar, "Amritsar")
+temporal(gurdaspur1, "Gurdaspur")
+temporal(jalandhar, "Jalandhar")
+temporal(sasnagar, "SAS Nagar")
+temporal(shirmuktsar, "Shir Muktsar Sahib")
 
-sbsnagar$Months <- as.Date(sbsnagar$Months,
-                               format = "%m")
